@@ -32,12 +32,22 @@ network <- read.inp("Subject#4_Venissieux.inp")
 ###network.res <- read.rpt("Subject#4_Venissieux.rpt")
 
 # Defining the demand's values to be tested
-###demand <- seq(from = 1, to = 2, by = 0.1)
+  # seeking for the fulfillment of both conditions
+demand <- seq(from = 1, to = 2, by = 0.1)
 ###demand <- seq(from = 1.7, to = 1.8, by = 0.01)
 ###demand <- seq(from = 1.73, to = 1.74, by = 0.001)
 ###demand <- seq(from = 1.733, to = 1.734, by = 0.0001)
 ###demand <- seq(from = 1.7334, to = 1.7335, by = 0.00001)
-demand <- seq(from = 1.73343, to = 1.73344, by = 0.000001)
+###demand <- seq(from = 1.73343, to = 1.73344, by = 0.000001)
+
+# Defining the demand's values to be tested
+  # seeking for the fulfillment of minimum pressure condition
+###demand <- seq(from = 1, to = 10, by = 1)
+###demand <- seq(from = 3, to = 4, by = 0.1)
+###demand <- seq(from = 3.8, to = 3.9, by = 0.01)
+###demand <- seq(from = 3.81, to = 3.82, by = 0.001)
+###demand <- seq(from = 3.811, to = 3.812, by = 0.0001)
+###demand <- seq(from = 3.8113, to = 3.8114, by = 0.00001)
 
 # Other parameters for the iteration loops
 N <- length(demand)                         #Num of demands to test
@@ -65,8 +75,8 @@ MyNode <- "470028955"                     #Node whose demand is tested
 ENgetnodevalue(ENgetnodeindex(MyNode), 'EN_BASEDEMAND')
 
 for(i in 1:N){                            #For each demand value
-  global.results[i,1] <- Demand[i]
-  ENsetnodevalue(ENgetnodeindex(MyNode), 'EN_BASEDEMAND', Demand[i])
+  global.results[i,1] <- demand[i]
+  ENsetnodevalue(ENgetnodeindex(MyNode), 'EN_BASEDEMAND', demand[i])
   ENinitH(0)                              #Initialize the simulation at TS = 0
   for (j in 1:numTS){                     #For each time step
     ENrunH()                              #Simulate for ONE time step
@@ -93,7 +103,7 @@ for(i in 1:N){                            #For each demand value
     # get the max velocity among the maximums of all TS
   global.results[i,2] <- min(TS.results$Pressure)
   global.results[i,3] <- max(TS.results$Vel)
-  print(paste("Processed demand: d =", Demand[i]))
+  print(paste("Processed demand: d =", demand[i]))
 }
 
 ENcloseH()                                #Close the simulating tool
